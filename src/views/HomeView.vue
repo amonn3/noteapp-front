@@ -1,16 +1,21 @@
 <template>
   <div class="home">
     <h1>Home</h1>
-    <h3>{{ message }}</h3>
+    <UserForm />
   </div>
 </template>
   
   <script>
   import { ref, onMounted } from 'vue'
   import api from '@/services/api'
+  import UserForm from '@/components/UserForm.vue'
   
   export default {
     name: 'HomePage',
+
+    components: {
+      UserForm
+    },
     setup() {
       const message = ref('')
       const loading = ref(true)
@@ -32,7 +37,7 @@
   
       return {
         message,
-        loading
+        loading,
       }
     }
   }
