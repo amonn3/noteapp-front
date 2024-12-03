@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomePage from '@/components/HomeView.vue'
-import HealthCheck from '@/components/HealthCheck.vue'
-import DashboardView from '@/components/DashboardView.vue'
+import HomePage from '@/views/HomeView.vue'
+import HealthCheck from '@/views/HealthCheck.vue'
+import DashboardView from '@/views/DashboardView.vue'
 
 const routes = [
   {
