@@ -36,12 +36,30 @@
 
       <v-btn class="mt-2" type="submit" block>Cadastrar</v-btn>
     </v-form>
+    <v-alert
+      v-if="showSuccessAlert"
+      type="success"
+      variant="elevated"
+      class="mt-4"
+    >
+      {{ alertMessage }}
+    </v-alert>
+
+    <v-alert
+      v-if="showErrorAlert"
+      type="error"
+      variant="elevated"
+      class="mt-4"
+    >
+      {{ alertMessage }}
+    </v-alert>
   </v-sheet>
 </template>
 
 <script>
 import { ref, watch } from 'vue';
 import api from '@/services/api';
+import router from '@/router';
 
 export default {
   name: 'UserForm',
@@ -53,6 +71,9 @@ export default {
     const password = ref('');
     const confirmPassword = ref('');
     const emailError = ref('');
+    const showSuccessAlert = ref(false);
+    const showErrorAlert = ref(false);
+    const alertMessage = ref('');
 
     const nameRules = [
       v => !!v || 'Nome é obrigatório'
@@ -88,24 +109,39 @@ export default {
         }
         
         try {
-          await api.post('/users', {
+          const res = await api.post('/users', {
             user: {
               name: fullName,
               email: email.value,
               password: password.value
             }
           });
-        } catch (error) {
-          if (error.response?.status === 409) {
-            emailError.value = error.response.data.status.message;
+          const data = res.data;
+
+          if (data.message === "Email já está em uso") {
+            emailError.value = data.message;
+            alertMessage.value = data.message;
+            showErrorAlert.value = true;
+            setTimeout(() => {
+              showErrorAlert.value = false;
+            }, 2000);
+          } else {
+            showSuccessAlert.value = true;
+            alertMessage.value = data.message;
+            setTimeout(() => {
+              showSuccessAlert.value = false;
+              router.push('/health'); // Redirecionará para a página inicial quando eu tratar rotas autenticadas.
+            }, 2000);
           }
+
+        } catch (error) {
+          showErrorAlert.value = true;
+          alertMessage.value = error.message;
+          setTimeout(() => {
+            showErrorAlert.value = false;
+          }, 2000);
         }
-
-      } else {
-        console.log('Formulário inválido');
       }
-
-      
     };
 
     watch(email, () => {
@@ -126,6 +162,9 @@ export default {
       confirmPasswordRules,
       handleSubmit,
       emailError,
+      showSuccessAlert,
+      showErrorAlert,
+      alertMessage
     };
   },
 };
