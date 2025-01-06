@@ -1,50 +1,111 @@
 <template>
-  <div class="home">
-    <h1>Home</h1>
-    <UserForm />
+  <div class="home d-flex flex-column align-items-center justify-content-center">
+    <div class="welcome-container text-center">
+      <h1 class="display-1 font-weight-bold mb-4">{{ message }}</h1>
+      <v-card  class="pa-6 rounded-lg elevation-3" width="400">
+        <div class="text-h4 font-weight-medium mb-2">
+          Olá, {{ userName }}! 👋
+        </div>
+        <div class="text-subtitle-1 text-medium-emphasis mb-4">
+          Que bom ter você por aqui novamente!
+        </div>
+        <v-btn
+          block
+          color="error"
+          variant="elevated"
+          :loading="isLoggingOut"
+          @click="handleLogout"
+          class="text-none"
+          prepend-icon="mdi-logout"
+          rounded
+        >
+          Encerrar Sessão
+        </v-btn>
+      </v-card>
+    </div>
+
+    <v-alert
+      v-if="showErrorAlert"
+      type="error"
+      variant="elevated"
+      class="mt-4"
+      width="400"
+    >
+      {{ errorMessage }}
+    </v-alert>
   </div>
 </template>
   
-  <script>
-  import { ref, onMounted } from 'vue'
-  import api from '@/services/api'
-  import UserForm from '@/components/UserForm.vue'
-  
-  export default {
-    name: 'HomePage',
+<script>
+import { ref, onMounted } from 'vue'
+import api from '@/services/api'
+import { useRouter } from 'vue-router'
 
-    components: {
-      UserForm
-    },
-    setup() {
-      const message = ref('')
-      const loading = ref(true)
-  
-      const fetchItems = async () => {
-        try {
-          const response = await api.get('users/welcome')
-          message.value = response.data.message
-        } catch (error) {
-          console.error('Erro ao buscar items:', error)
-        } finally {
-          loading.value = false
-        }
-      }
-  
-      onMounted(() => {
-        fetchItems()
-      })
-  
-      return {
-        message,
-        loading,
+export default {
+  name: 'HomeView',
+  setup() {
+    const message = ref('');
+    const loading = ref(true);
+    const router = useRouter();
+    const userName = ref('');
+    const isLoggingOut = ref(false);
+    const showErrorAlert = ref(false);
+    const errorMessage = ref('');
+
+    const handleLogout = async () => {
+      isLoggingOut.value = true;
+      try {
+        await api.delete('users/logout');
+        router.push('/signin');
+      } catch (error) {
+        showErrorAlert.value = true;
+        errorMessage.value = 'Erro ao fazer logout. Tente novamente.';
+        setTimeout(() => {
+          showErrorAlert.value = false;
+        }, 4000);
+      } finally {
+        isLoggingOut.value = false;
       }
     }
+
+    const fetchUser = async () => {
+      try {
+        const response = await api.get('users/welcome');
+        message.value = response.data.message;
+        userName.value = response.data.user.name;
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          router.push('/signin');
+        }
+      } finally {
+        loading.value = false;
+      }
+    }
+
+    onMounted(() => {
+      fetchUser();
+    })
+
+    return {
+      message,
+      loading,
+      userName,
+      handleLogout,
+      isLoggingOut,
+      showErrorAlert,
+      errorMessage
+    }
   }
-  </script>
+}
+</script>
   
-  <style scoped>
-  .home {
-    padding: 20px;
-  }
-  </style>
+<style scoped>
+.home {
+  padding: 20px;
+}
+
+.welcome-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <v-sheet class="mx-auto" width="600">
+  <v-sheet class="mx-auto registration-form-container" width="600">
     <v-form @submit.prevent="handleSubmit" ref="form">
       <v-text-field
         v-model="name"
@@ -34,7 +34,9 @@
         type="password"
       ></v-text-field>
 
-      <v-btn class="mt-2" type="submit" block>Cadastrar</v-btn>
+      <div class="d-flex justify-center">
+        <v-btn class="mt-2" rounded="xs" variant="outlined" color="primary" type="submit">Cadastrar</v-btn>
+      </div>
     </v-form>
     <v-alert
       v-if="showSuccessAlert"
@@ -169,3 +171,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+  .registration-form-container {
+    padding: 2rem;
+    border-radius: 4px;
+  }
+</style>

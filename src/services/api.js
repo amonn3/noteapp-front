@@ -1,4 +1,7 @@
 import axios from 'axios'
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const api = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
@@ -10,12 +13,14 @@ const api = axios.create({
   withCredentials: true
 })
 
-// Interceptor para tratamento de erros
+// Simplificando os interceptors
 api.interceptors.response.use(
   response => response,
   error => {
-    // Tratamento de erros aqui
-    return Promise.reject(error)
+    if (error.response && error.response.status === 401) {
+      router.push('/signin');
+    }
+    return Promise.reject(error);
   }
 )
 
