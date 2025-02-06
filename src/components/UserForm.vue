@@ -130,10 +130,26 @@ export default {
           } else {
             showSuccessAlert.value = true;
             alertMessage.value = data.message;
-            setTimeout(() => {
-              showSuccessAlert.value = false;
-              router.push('/health'); // Redirecionará para a página inicial quando eu tratar rotas autenticadas.
-            }, 2000);
+            try {
+              // Tenta realizar o login automaticamente usando as mesmas credenciais
+              await api.post('/users/login', {
+                user: {
+                  email: email.value,
+                  password: password.value
+                }
+              });
+              // Após login bem-sucedido, redireciona para a página inicial
+              setTimeout(() => {
+                showSuccessAlert.value = false;
+                router.push('/');
+              }, 2000);
+            } catch (loginError) {
+              showErrorAlert.value = true;
+              alertMessage.value = loginError.message;
+              setTimeout(() => {
+                showErrorAlert.value = false;
+              }, 2000);
+            }
           }
 
         } catch (error) {
