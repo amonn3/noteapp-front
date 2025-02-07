@@ -1,14 +1,30 @@
 <template>
   <div class="home d-flex flex-column align-items-center justify-content-center">
     <div class="welcome-container text-center">
-      <h1 class="display-1 font-weight-bold mb-4">{{ message }}</h1>
+      <div class="d-flex flex-column align-items-center justify-content-center mt-8">
+        <h1 class="display-1 font-weight-bold mb-4">Noteapp</h1>
+        <h3>Thoughts become things</h3>
+      </div>
       <v-card  class="pa-6 rounded-lg elevation-3" width="400">
         <div class="text-h4 font-weight-medium mb-2">
-          Olá, {{ userName }}! 👋
+          Olá, {{ userName }}!
         </div>
         <div class="text-subtitle-1 text-medium-emphasis mb-4">
           Que bom ter você por aqui novamente!
         </div>
+        <v-btn
+          block
+          color="primary"
+          variant="elevated"
+          @click="createNote"
+          class="text-none"
+          prepend-icon="mdi-note-plus"
+          rounded
+        >
+          Criar Nota
+        </v-btn>
+      </v-card>
+      <v-card  class="pa-6 mt-8 rounded-lg elevation-3" width="400">
         <v-btn
           block
           color="error"
