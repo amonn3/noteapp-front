@@ -9,9 +9,6 @@
         <div class="text-h4 font-weight-medium mb-2">
           Olá, {{ userName }}!
         </div>
-        <div class="text-subtitle-1 text-medium-emphasis mb-4">
-          Que bom ter você por aqui novamente!
-        </div>
         <v-btn
           block
           color="primary"
