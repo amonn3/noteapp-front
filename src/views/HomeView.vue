@@ -1,10 +1,6 @@
 <template>
   <div class="home d-flex flex-column align-items-center justify-content-center">
     <div class="welcome-container text-center">
-      <div class="d-flex flex-column align-items-center justify-content-center mt-8">
-        <h1 class="display-1 font-weight-bold mb-4">Noteapp</h1>
-        <h3>Thoughts become things</h3>
-      </div>
       <v-card  class="pa-6 rounded-lg elevation-3" width="400">
         <div class="text-h4 font-weight-medium mb-2">
           Olá, {{ userName }}!
@@ -19,20 +15,6 @@
           rounded
         >
           Criar Nota
-        </v-btn>
-      </v-card>
-      <v-card  class="pa-6 mt-8 rounded-lg elevation-3" width="400">
-        <v-btn
-          block
-          color="error"
-          variant="elevated"
-          :loading="isLoggingOut"
-          @click="handleLogout"
-          class="text-none"
-          prepend-icon="mdi-logout"
-          rounded
-        >
-          Encerrar Sessão
         </v-btn>
       </v-card>
     </div>
@@ -56,6 +38,8 @@ import { useRouter } from 'vue-router'
 
 export default {
   name: 'HomeView',
+  components: {
+  },
   setup() {
     const message = ref('');
     const loading = ref(true);

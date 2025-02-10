@@ -1,34 +1,84 @@
 <template>
-  <nav>
-    <router-link to="/health">Health</router-link> |
-    <router-link to="/">Home</router-link> |
-    <router-link to="/dashboards">Dashboard</router-link> |
-    <router-link to="/signin">Login</router-link> |
-    <router-link to="/signup">Cadastro</router-link>
-  </nav>
+  <div class="d-flex justify-space-between template-container">
+    <LargeLogo />
+    <div class="d-flex justify-center">
+        <nav>
+          <template v-if="isLoggedIn">
+            <router-link to="/health">Health</router-link> |
+            <router-link to="/">Home</router-link> |
+            <router-link to="/dashboards">Dashboard</router-link>
+          </template>
+          <template v-else>
+            <router-link to="/signin">Login</router-link> |
+            <router-link to="/signup">Cadastro</router-link>
+          </template>
+        </nav>
+    </div>
+    <div class="d-flex justify-center align-center">
+      <v-btn
+          block
+          color="error"
+          variant="elevated"
+          :loading="isLoggingOut"
+          @click="handleLogout"
+          class="text-none"
+          prepend-icon="mdi-logout"
+          rounded
+        >
+          Sair
+        </v-btn>
+    </div>
+  </div>
 </template>
 
 <script>
   import api from '@/services/api';
-import { useRouter } from 'vue-router';
+  import { useRouter } from 'vue-router';
+  import LargeLogo from '@/components/LargeLogo.vue';
+  import { ref, onMounted } from 'vue';
 
 export default {
   name: 'NavBar',
+  components: {
+    LargeLogo
+  },
+
   setup() {
     const router = useRouter();
+    const isLoggedIn = ref(false);
+    const isLoggingOut = ref(false);
 
-    const handleLogout = async () => {
+    const checkLoginStatus = async () => {
       try {
-        await api.delete('users/logout');
-        localStorage.removeItem('_session_id');
-        router.push('/signin');
+        const response = await api.get('users/welcome');
+        isLoggedIn.value = response.status === 200;
       } catch (error) {
-        console.error('Erro ao fazer logout:', error);
+        isLoggedIn.value = false;
       }
     };
 
+    const handleLogout = async () => {
+      isLoggingOut.value = true;
+      try {
+        await api.delete('users/logout');
+        localStorage.removeItem('_session_id');
+        isLoggedIn.value = false;
+        router.push('/signin');
+      } catch (error) {
+        console.error('Erro ao fazer logout:', error);
+      } finally {
+        isLoggingOut.value = false;
+      }
+    };
+
+    onMounted(() => {
+      checkLoginStatus();
+    });
+
     return {
-      handleLogout
+      handleLogout,
+      isLoggedIn,
+      isLoggingOut
     };
   }
 }
@@ -55,5 +105,10 @@ nav a{
 
 nav a.router-link-active {
   color: #42b883 !important; 
+}
+
+.template-container {
+  font-family: 'Roboto Slab';
+  padding: 0 20px;
 }
 </style>
