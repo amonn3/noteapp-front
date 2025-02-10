@@ -62,6 +62,7 @@
 import { ref, watch } from 'vue';
 import api from '@/services/api';
 import router from '@/router';
+import { useAuthStore } from '@/stores';
 
 export default {
   name: 'RegisterForm',
@@ -76,7 +77,7 @@ export default {
     const showSuccessAlert = ref(false);
     const showErrorAlert = ref(false);
     const alertMessage = ref('');
-
+    const auth = useAuthStore();
     const nameRules = [
       v => !!v || 'Nome é obrigatório'
     ];
@@ -132,12 +133,7 @@ export default {
             alertMessage.value = data.message;
             try {
               // Tenta realizar o login automaticamente usando as mesmas credenciais
-              await api.post('/users/login', {
-                user: {
-                  email: email.value,
-                  password: password.value
-                }
-              });
+              await auth.login({ email: email.value, password: password.value });
               // Após login bem-sucedido, redireciona para a página inicial
               setTimeout(() => {
                 showSuccessAlert.value = false;
