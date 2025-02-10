@@ -30,8 +30,8 @@
 
 <script>
 import { ref } from 'vue';
-import api from '@/services/api';
-import { useRouter, useRoute } from 'vue-router';
+import { useRoute } from 'vue-router';
+import { useAuthStore } from '@/stores';
 
 export default {
   name: 'LoginForm',
@@ -42,7 +42,7 @@ export default {
     const password = ref('');
     const showErrorAlert = ref(false) || ref(query.showAlert);
     const errorMessage = ref('') || ref(query.message);
-    const router = useRouter() ;
+    const auth = useAuthStore();
 
     const emailRules = [
       v => !!v || 'Email é obrigatório',
@@ -61,18 +61,7 @@ export default {
       
       if (valid) {
         try {
-          const response = await api.post('users/login', { 
-            user: {
-              email: email.value,
-              password: password.value
-            } 
-          });
-          
-          // Verifica se o login foi bem-sucedido
-          if (response.status === 200) {
-            router.push('/');
-          }
-          
+          await auth.login({ email: email.value, password: password.value });
         } catch (error) {
           console.log(error);
           showErrorAlert.value = true;
