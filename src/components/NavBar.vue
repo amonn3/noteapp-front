@@ -32,56 +32,38 @@
 </template>
 
 <script>
-  import api from '@/services/api';
-  import { useRouter } from 'vue-router';
-  import LargeLogo from '@/components/LargeLogo.vue';
-  import { ref, onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
+import { useAuthStore } from '@/stores';
+import LargeLogo from '@/components/LargeLogo.vue';
 
 export default {
   name: 'NavBar',
-  components: {
-    LargeLogo
-  },
-
+  components: { LargeLogo },
   setup() {
-    const router = useRouter();
-    const isLoggedIn = ref(false);
-    const isLoggingOut = ref(false);
+    const auth = useAuthStore();
 
-    const checkLoginStatus = async () => {
-      try {
-        const response = await api.get('users/welcome');
-        isLoggedIn.value = response.status === 200;
-      } catch (error) {
-        isLoggedIn.value = false;
-      }
-    };
-
-    const handleLogout = async () => {
-      isLoggingOut.value = true;
-      try {
-        await api.delete('users/logout');
-        localStorage.removeItem('_session_id');
-        isLoggedIn.value = false;
-        router.push('/signin');
-      } catch (error) {
-        console.error('Erro ao fazer logout:', error);
-      } finally {
-        isLoggingOut.value = false;
-      }
-    };
+    const isLoggedIn = computed(() => auth.isLoggedIn);
+    const isLoggingOut = computed(() => auth.loading);
 
     onMounted(() => {
-      checkLoginStatus();
+      auth.checkAuth();
     });
 
-    return {
-      handleLogout,
-      isLoggedIn,
-      isLoggingOut
+    const handleLogout = async () => {
+      try {
+        await auth.logout();
+      } catch (error) {
+        console.error('Erro ao fazer logout:', error);
+      }
     };
-  }
-}
+
+    return {
+      isLoggedIn,
+      isLoggingOut,
+      handleLogout,
+    };
+  },
+};
 </script>
 
 <style scoped >
