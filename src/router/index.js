@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import api from '@/services/api'
 import HomeView from '@/views/HomeView.vue'
 import HealthCheck from '@/views/HealthCheck.vue'
 import DashboardView from '@/views/DashboardView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
-import api from '@/services/api'
+import CreateNoteView from '@/views/CreateNoteView.vue'
 
 const routes = [
   {
@@ -33,6 +34,11 @@ const routes = [
     path: '/signup',
     name: 'signup',
     component: RegisterView
+  },
+  {
+    path: '/create-note',
+    name: 'create-note',
+    component: CreateNoteView
   }
 ]
 
