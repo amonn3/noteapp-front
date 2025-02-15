@@ -1,22 +1,57 @@
 <template>
   <div class="home d-flex flex-column align-items-center justify-content-center">
     <div class="welcome-container text-center">
-      <v-card  class="pa-6 rounded-lg elevation-3" width="400">
-        <div class="text-h4 font-weight-medium mb-2">
-          Olá, {{ userName }}!
-        </div>
-        <v-btn
-          block
-          color="primary"
-          variant="elevated"
-          @click="createNote"
-          class="text-none"
-          prepend-icon="mdi-note-plus"
-          rounded
-        >
-          Criar Nota
-        </v-btn>
-      </v-card>
+      <div class="content-container">
+        <v-card  class="pa-6 rounded-lg elevation-3" width="70%">
+          <div class="d-flex flex-column align-center">
+            <div class="font-weight-medium mb-2 text-start">
+              Olá, {{ userName }}! Você já criou {{ notesCount === 1 ? '1 nota': notesCount + ' notas' }} e aqui estão as mais recentes.
+            </div>
+            <div class="last-notes-container">
+              <div class="last-notes-title">
+                Últimas Notas
+              </div>
+              <v-list class="note-list">
+                <v-list-item v-for="note in lastNotes" :key="note._id">
+                  <a :href="`users/notes/${note._id}`" class="note-link" target="_blank">
+                    - {{ note.title }}
+                  </a>
+                </v-list-item>
+              </v-list>
+            </div>
+          </div>
+        </v-card>
+        <v-card  class="pa-6 rounded-lg elevation-3" width="30%">
+          <div class="action-btns">
+            <div class="action-btn-container">
+              <v-btn
+                block
+                color="primary"
+                variant="elevated"
+                @click="createNote"
+                class="text-none"
+                prepend-icon="mdi-note-plus"
+                rounded
+              >
+                Criar Nota
+              </v-btn>
+            </div>
+            <div class="action-btn-container">
+              <v-btn
+                block
+                color="secondary"
+                variant="outlined"
+                @click="allNotes"
+                class="text-none"
+                prepend-icon="mdi-note-multiple"
+                rounded
+              >
+                Ver Todas
+              </v-btn>
+            </div>
+          </div>
+        </v-card>
+      </div>
     </div>
 
     <v-alert
@@ -45,9 +80,11 @@ export default {
     const loading = ref(true);
     const router = useRouter();
     const userName = ref('');
+    const lastNotes = ref([]);
     const isLoggingOut = ref(false);
     const showErrorAlert = ref(false);
     const errorMessage = ref('');
+    const notesCount = ref(0);
 
     const handleLogout = async () => {
       isLoggingOut.value = true;
@@ -70,6 +107,8 @@ export default {
         const response = await api.get('users/welcome');
         message.value = response.data.message;
         userName.value = response.data.user.name;
+        lastNotes.value = response.data.user.notes.reverse().slice(0, 5);
+        notesCount.value = response.data.user.notes.length;
       } catch (error) {
         if (error.response && error.response.status === 401) {
           router.push('/signin');
@@ -77,6 +116,10 @@ export default {
       } finally {
         loading.value = false;
       }
+    }
+
+    const createNote = () => {
+      router.push('/create-note');
     }
 
     onMounted(() => {
@@ -90,7 +133,10 @@ export default {
       handleLogout,
       isLoggingOut,
       showErrorAlert,
-      errorMessage
+      errorMessage,
+      lastNotes,
+      createNote,
+      notesCount,
     }
   }
 }
@@ -101,8 +147,76 @@ export default {
   padding: 20px;
 }
 
+.last-notes-container {
+  width: 80%;
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.note-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 .welcome-container {
-  max-width: 800px;
+  width: 80%;
   margin: 0 auto;
+  font-family: 'Roboto Slab';
+}
+
+.last-notes-title {
+  color: #d2d2d2;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+
+.text-start {
+  font-size: 1.5rem;
+  width: fit-content;
+}
+
+.content-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.action-btns {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  height: 100%;
+}
+.action-btn-container {
+  padding: 8px;
+  width: 80%;
+}
+
+.note-link {
+  color: inherit !important;
+  text-decoration: none;
+}
+
+.note-link:visited {
+  color: inherit !important;
+}
+
+.note-link:hover {
+  color: #42b883 !important;
+  transition: color 0.3s ease;
+}
+
+.note-link.router-link-active {
+  color: #42b883 !important;
 }
 </style>
