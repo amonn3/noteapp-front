@@ -1,19 +1,25 @@
 <template>
-  <div class="home d-flex flex-column align-items-center justify-content-center">
+  <div
+    class="home d-flex flex-column align-items-center justify-content-center"
+  >
     <div class="welcome-container text-center">
       <div class="content-container">
-        <v-card  class="pa-6 rounded-lg elevation-3" width="70%">
+        <v-card class="pa-6 rounded-lg elevation-3" width="70%">
           <div class="d-flex flex-column align-center">
             <div class="font-weight-medium mb-2 text-start">
-              Olá, {{ userName }}! Você já criou {{ notesCount === 1 ? '1 nota': notesCount + ' notas' }} e aqui estão as mais recentes.
+              Olá, {{ userName }}! Você já criou
+              {{ notesCount === 1 ? "1 nota" : notesCount + " notas" }} e aqui
+              estão as mais recentes.
             </div>
             <div class="last-notes-container">
-              <div class="last-notes-title">
-                Últimas Notas
-              </div>
+              <div class="last-notes-title">Últimas Notas</div>
               <v-list class="note-list">
                 <v-list-item v-for="note in lastNotes" :key="note._id">
-                  <a :href="`users/notes/${note._id}`" class="note-link" target="_blank">
+                  <a
+                    :href="`users/notes/${note._id}`"
+                    class="note-link"
+                    target="_blank"
+                  >
                     - {{ note.title }}
                   </a>
                 </v-list-item>
@@ -21,7 +27,7 @@
             </div>
           </div>
         </v-card>
-        <v-card  class="pa-6 rounded-lg elevation-3" width="30%">
+        <v-card class="pa-6 rounded-lg elevation-3" width="30%">
           <div class="action-btns">
             <div class="action-btn-container">
               <v-btn
@@ -65,66 +71,69 @@
     </v-alert>
   </div>
 </template>
-  
+
 <script>
-import { ref, onMounted } from 'vue'
-import api from '@/services/api'
-import { useRouter } from 'vue-router'
+import { ref, onMounted } from "vue";
+import api from "@/services/api";
+import { useRouter } from "vue-router";
 
 export default {
-  name: 'HomeView',
-  components: {
-  },
+  name: "HomeView",
+  components: {},
   setup() {
-    const message = ref('');
+    const message = ref("");
     const loading = ref(true);
     const router = useRouter();
-    const userName = ref('');
+    const userName = ref("");
     const lastNotes = ref([]);
     const isLoggingOut = ref(false);
     const showErrorAlert = ref(false);
-    const errorMessage = ref('');
+    const errorMessage = ref("");
     const notesCount = ref(0);
 
     const handleLogout = async () => {
       isLoggingOut.value = true;
       try {
-        await api.delete('users/logout');
-        router.push('/signin');
+        await api.delete("users/logout");
+        router.push("/signin");
       } catch (error) {
         showErrorAlert.value = true;
-        errorMessage.value = 'Erro ao fazer logout. Tente novamente.';
+        errorMessage.value = "Erro ao fazer logout. Tente novamente.";
         setTimeout(() => {
           showErrorAlert.value = false;
         }, 4000);
       } finally {
         isLoggingOut.value = false;
       }
-    }
+    };
 
     const fetchUser = async () => {
       try {
-        const response = await api.get('users/welcome');
+        const response = await api.get("users/welcome");
         message.value = response.data.message;
         userName.value = response.data.user.name;
         lastNotes.value = response.data.user.notes.reverse().slice(0, 5);
         notesCount.value = response.data.user.notes.length;
       } catch (error) {
         if (error.response && error.response.status === 401) {
-          router.push('/signin');
+          router.push("/signin");
         }
       } finally {
         loading.value = false;
       }
-    }
+    };
 
     const createNote = () => {
-      router.push('/create-note');
-    }
+      router.push("/create-note");
+    };
+
+    const allNotes = () => {
+      router.push("/users/notes");
+    };
 
     onMounted(() => {
       fetchUser();
-    })
+    });
 
     return {
       message,
@@ -137,11 +146,12 @@ export default {
       lastNotes,
       createNote,
       notesCount,
-    }
-  }
-}
+      allNotes,
+    };
+  },
+};
 </script>
-  
+
 <style scoped>
 .home {
   padding: 20px;
@@ -167,7 +177,7 @@ export default {
 .welcome-container {
   width: 80%;
   margin: 0 auto;
-  font-family: 'Roboto Slab';
+  font-family: "Roboto Slab";
 }
 
 .last-notes-title {
@@ -175,7 +185,6 @@ export default {
   font-size: 1.2rem;
   font-weight: 500;
 }
-
 
 .text-start {
   font-size: 1.5rem;
