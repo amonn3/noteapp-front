@@ -4,7 +4,11 @@
   >
     <div class="welcome-container text-center">
       <div class="content-container">
-        <v-card v-if="hasNotes" class="pa-6 rounded-lg elevation-3" width="70%">
+        <v-card
+          v-if="hasNotes"
+          class="pa-6 rounded-lg elevation-24"
+          width="70%"
+        >
           <div class="d-flex flex-column align-center">
             <div class="font-weight-medium mb-2 text-start">
               Olá, {{ userName }}! Você já criou
@@ -27,7 +31,7 @@
             </div>
           </div>
         </v-card>
-        <v-card v-else class="pa-6 rounded-lg elevation-3" width="70%">
+        <v-card v-else class="pa-6 rounded-lg elevation-24" width="70%">
           <div class="d-flex flex-column align-center">
             <div class="font-weight-medium mb-2 text-start">
               Você ainda não criou nenhuma nota. Comece agora mesmo!
@@ -35,7 +39,7 @@
           </div>
         </v-card>
 
-        <v-card class="pa-6 rounded-lg elevation-3" width="30%">
+        <v-card class="pa-6 rounded-lg elevation-24" width="30%">
           <div class="action-btns">
             <div class="action-btn-container">
               <v-btn
@@ -171,7 +175,6 @@ export default {
 .last-notes-container {
   width: 80%;
   height: 100%;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -238,5 +241,21 @@ export default {
 
 .note-link.router-link-active {
   color: #42b883 !important;
+}
+
+@media (max-width: 1366px) {
+  .text-start {
+    font-size: 1.3rem;
+  }
+
+  .last-notes-container {
+    width: 80%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
 }
 </style>
