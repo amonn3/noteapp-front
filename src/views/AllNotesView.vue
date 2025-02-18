@@ -1,15 +1,16 @@
 <template>
   <div class="all-notes-container">
     <div class="d-flex justify-space-between align-center mb-6 title-container">
-      <h1 class="text-h4">Minhas Notas</h1>
+      <div class="page-title">Minhas Notas</div>
       <v-btn
         color="primary"
         variant="elevated"
         prepend-icon="mdi-note-plus"
         @click="createNote"
         rounded
+        class="text-none"
       >
-        Nova Nota
+        Criar Nota
       </v-btn>
     </div>
 
@@ -17,7 +18,7 @@
       <v-progress-circular indeterminate color="primary"></v-progress-circular>
     </div>
 
-    <div class="cards-container" v-else>
+    <v-card class="cards-container rounded-lg elevation-24" v-else>
       <div v-if="userNotes.length === 0" class="text-center mt-8">
         <p class="text-h6">Você ainda não tem notas.</p>
         <v-btn
@@ -62,7 +63,7 @@
           </v-card>
         </v-col>
       </v-row>
-    </div>
+    </v-card>
 
     <v-dialog v-model="showDeleteDialog" max-width="400">
       <v-card>
@@ -208,6 +209,8 @@ export default {
   max-height: 75vh;
   overflow-y: auto;
   padding: 2rem;
+  border-radius: 8px;
+  background-color: #1e1e1e;
 }
 
 .cards-container::-webkit-scrollbar {
@@ -227,7 +230,22 @@ export default {
 }
 
 .title-container {
-  width: 70%;
+  width: 80%;
   margin: 0 auto;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+@media (max-width: 1366px) {
+  .cards-container {
+    width: 75%;
+  }
+  .note-card {
+    width: 13rem;
+    height: 13rem;
+  }
 }
 </style>
