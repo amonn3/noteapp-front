@@ -3,6 +3,7 @@
     class="home d-flex flex-column align-items-center justify-content-center"
   >
     <div class="welcome-container text-center">
+      <div class="page-title">Início</div>
       <div class="content-container">
         <v-card
           v-if="hasNotes"
@@ -209,6 +210,15 @@ export default {
   display: flex;
   justify-content: center;
   gap: 20px;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .action-btns {
