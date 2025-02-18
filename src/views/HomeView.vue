@@ -4,7 +4,7 @@
   >
     <div class="welcome-container text-center">
       <div class="content-container">
-        <v-card class="pa-6 rounded-lg elevation-3" width="70%">
+        <v-card v-if="hasNotes" class="pa-6 rounded-lg elevation-3" width="70%">
           <div class="d-flex flex-column align-center">
             <div class="font-weight-medium mb-2 text-start">
               Olá, {{ userName }}! Você já criou
@@ -27,6 +27,14 @@
             </div>
           </div>
         </v-card>
+        <v-card v-else class="pa-6 rounded-lg elevation-3" width="70%">
+          <div class="d-flex flex-column align-center">
+            <div class="font-weight-medium mb-2 text-start">
+              Você ainda não criou nenhuma nota. Comece agora mesmo!
+            </div>
+          </div>
+        </v-card>
+
         <v-card class="pa-6 rounded-lg elevation-3" width="30%">
           <div class="action-btns">
             <div class="action-btn-container">
@@ -73,7 +81,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import api from "@/services/api";
 import { useRouter } from "vue-router";
 
@@ -90,6 +98,8 @@ export default {
     const showErrorAlert = ref(false);
     const errorMessage = ref("");
     const notesCount = ref(0);
+
+    const hasNotes = computed(() => notesCount.value > 0);
 
     const handleLogout = async () => {
       isLoggingOut.value = true;
@@ -147,6 +157,7 @@ export default {
       createNote,
       notesCount,
       allNotes,
+      hasNotes,
     };
   },
 };
