@@ -169,7 +169,7 @@ export default {
 
 <style scoped>
 .home {
-  padding: 20px;
+  padding: 2rem;
 }
 
 .last-notes-container {
