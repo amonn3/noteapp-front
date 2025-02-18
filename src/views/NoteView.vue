@@ -19,6 +19,7 @@
                 prepend-icon="mdi-pencil"
                 @click="editNote"
                 rounded
+                class="text-none"
               >
                 Editar
               </v-btn>
@@ -28,6 +29,7 @@
                 prepend-icon="mdi-delete"
                 @click="confirmDelete"
                 rounded
+                class="text-none"
               >
                 Excluir
               </v-btn>
