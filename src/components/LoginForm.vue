@@ -1,5 +1,5 @@
 <template>
-  <v-sheet class="mx-auto form-login-container" width="600" elevation="10">
+  <v-sheet class="mx-auto form-login-container" width="600" elevation="24">
     <v-form @submit.prevent="handleSubmit" ref="form">
       <v-text-field
         v-model="email"
