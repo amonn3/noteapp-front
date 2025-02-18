@@ -140,7 +140,7 @@ export default {
               // Após login bem-sucedido, redireciona para a página inicial
               setTimeout(() => {
                 showSuccessAlert.value = false;
-                router.push("/");
+                router.push("/slogan");
               }, 2000);
             } catch (loginError) {
               showErrorAlert.value = true;

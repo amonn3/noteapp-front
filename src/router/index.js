@@ -7,6 +7,7 @@ import RegisterView from "@/views/RegisterView.vue";
 import CreateNoteView from "@/views/CreateNoteView.vue";
 import NoteView from "@/views/NoteView.vue";
 import AllNotesView from "@/views/AllNotesView.vue";
+import FakeLoadingView from "@/views/FakeLoadingView.vue";
 
 const routes = [
   {
@@ -44,6 +45,11 @@ const routes = [
     path: "/users/notes",
     name: "all-notes",
     component: AllNotesView,
+  },
+  {
+    path: "/slogan",
+    name: "slogan",
+    component: FakeLoadingView,
   },
 ];
 
