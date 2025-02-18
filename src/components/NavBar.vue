@@ -92,5 +92,6 @@ nav a.router-link-active {
 .template-container {
   font-family: "Roboto Slab";
   padding: 0 20px;
+  border-bottom: 1px solid #3d3d3d;
 }
 </style>
