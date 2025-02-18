@@ -2,42 +2,42 @@
   <div class="d-flex justify-space-between template-container">
     <LargeLogo />
     <div class="d-flex justify-center">
-        <nav>
-          <template v-if="isLoggedIn">
-            <router-link to="/health">Health</router-link> |
-            <router-link to="/">Home</router-link> |
-            <router-link to="/dashboards">Dashboard</router-link>
-          </template>
-          <template v-else>
-            <router-link to="/signin">Login</router-link> |
-            <router-link to="/signup">Cadastro</router-link>
-          </template>
-        </nav>
+      <nav>
+        <template v-if="isLoggedIn">
+          <router-link to="/health">Health</router-link> |
+          <router-link to="/">Início</router-link> |
+          <router-link to="/users/notes">Notas</router-link>
+        </template>
+        <template v-else>
+          <router-link to="/signin">Login</router-link> |
+          <router-link to="/signup">Cadastro</router-link>
+        </template>
+      </nav>
     </div>
     <div class="d-flex justify-center align-center">
       <v-btn
-          block
-          color="error"
-          variant="elevated"
-          :loading="isLoggingOut"
-          @click="handleLogout"
-          class="text-none"
-          prepend-icon="mdi-logout"
-          rounded
-        >
-          Sair
-        </v-btn>
+        block
+        color="error"
+        variant="elevated"
+        :loading="isLoggingOut"
+        @click="handleLogout"
+        class="text-none"
+        prepend-icon="mdi-logout"
+        rounded
+      >
+        Sair
+      </v-btn>
     </div>
   </div>
 </template>
 
 <script>
-import { computed, onMounted } from 'vue';
-import { useAuthStore } from '@/stores';
-import LargeLogo from '@/components/LargeLogo.vue';
+import { computed, onMounted } from "vue";
+import { useAuthStore } from "@/stores";
+import LargeLogo from "@/components/LargeLogo.vue";
 
 export default {
-  name: 'NavBar',
+  name: "NavBar",
   components: { LargeLogo },
   setup() {
     const auth = useAuthStore();
@@ -53,7 +53,7 @@ export default {
       try {
         await auth.logout();
       } catch (error) {
-        console.error('Erro ao fazer logout:', error);
+        console.error("Erro ao fazer logout:", error);
       }
     };
 
@@ -66,7 +66,7 @@ export default {
 };
 </script>
 
-<style scoped >
+<style scoped>
 nav {
   padding: 20px;
   display: flex;
@@ -81,16 +81,16 @@ nav a.router-link-active {
 nav a:visited {
   color: inherit !important;
 }
-nav a{
+nav a {
   color: inherit !important;
 }
 
 nav a.router-link-active {
-  color: #42b883 !important; 
+  color: #42b883 !important;
 }
 
 .template-container {
-  font-family: 'Roboto Slab';
+  font-family: "Roboto Slab";
   padding: 0 20px;
 }
 </style>
