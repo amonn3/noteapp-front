@@ -12,7 +12,7 @@
         color="primary"
         variant="outlined"
         prepend-icon="mdi-content-save"
-        class="elevation-6 text-none"
+        class="elevation-24 text-none"
         rounded="small"
         block
         @click="saveNote"
@@ -74,10 +74,12 @@ export default {
 .create-note-container {
   display: flex;
   flex-direction: column;
-  padding: 0 6rem;
   margin-top: 2rem;
   margin-bottom: 2rem;
   font-family: "Roboto Slab";
+  width: 80%;
+  margin: 0 auto;
+  padding: 2rem;
 }
 
 .create-note-title {
