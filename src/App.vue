@@ -8,19 +8,20 @@
 </template>
 
 <script>
-import NavBar from './components/NavBar.vue'
+import NavBar from "./components/NavBar.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    NavBar
-  }
-}
+    NavBar,
+  },
+};
 </script>
 
 <style>
 body {
   margin: 0;
   padding: 0;
+  font-family: "Roboto Slab";
 }
 </style>
